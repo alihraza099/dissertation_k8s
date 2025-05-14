@@ -1,0 +1,21 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: violence-detector
+  namespace: argocd
+  annotations:
+    argocd-image-updater.argoproj.io/image-list: violence-detector=alihraza/violence-detector
+    argocd-image-updater.argoproj.io/violence-detector.update-strategy: latest
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/alihraza099/lsbu_dissertation.git
+    targetRevision: main
+    path: .
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: default
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true

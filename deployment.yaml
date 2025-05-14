@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: violence-detector
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: violence-detector
+  template:
+    metadata:
+      labels:
+        app: violence-detector
+    spec:
+      containers:
+      - name: violence-detector
+        image: alihraza/violence-detector:latest
+        ports:
+        - containerPort: 8501
+        resources:
+          requests:
+            memory: "128Mi"
+            cpu: "250m"
+          limits:
+            memory: "256Mi"
+            cpu: "500m"
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: violence-detector-service
+spec:
+  type: NodePort
+  selector:
+    app: violence-detector
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: 8501
