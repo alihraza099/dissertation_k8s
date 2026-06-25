@@ -13,13 +13,20 @@ spec:
     metadata:
       labels:
         app: violence-detector
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port:   "8000"
+        prometheus.io/path:   "/metrics"
     spec:
       containers:
         - name: violence-detector
           image: alihraza/violence-detector:latest
           imagePullPolicy: Always
           ports:
-            - containerPort: 8501
+            - name: streamlit
+              containerPort: 8501
+            - name: metrics
+              containerPort: 8000
           resources:
             requests:
               memory: "1Gi"
@@ -37,6 +44,9 @@ spec:
   selector:
     app: violence-detector
   ports:
-    - protocol: TCP
+    - name: http
       port: 80
       targetPort: 8501
+    - name: api
+      port: 8000
+      targetPort: 8000
