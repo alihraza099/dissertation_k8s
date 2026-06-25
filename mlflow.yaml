@@ -27,15 +27,11 @@ spec:
     spec:
       containers:
         - name: mlflow
-          image: ghcr.io/mlflow/mlflow:latest
+          image: python:3.10-slim
           command:
-            - mlflow
-            - server
-            - --host=0.0.0.0
-            - --port=5000
-            - --backend-store-uri=sqlite:///mlflow/mlflow.db
-            - --default-artifact-root=/mlflow/artifacts
-            - --allowed-hosts=*
+            - sh
+            - -c
+            - "pip install mlflow==2.13.0 -q && mlflow server --host=0.0.0.0 --port=5000 --backend-store-uri=sqlite:///mlflow/mlflow.db --default-artifact-root=/mlflow/artifacts --allowed-hosts=*"
           ports:
             - containerPort: 5000
           volumeMounts:
